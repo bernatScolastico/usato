@@ -22,7 +22,7 @@ if ($result->num_rows > 0){
 
 
     if(!$pass==$password || !$user==$email){
-        echo "errore";
+        header("Location: ../index.html");
         exit;
     }
     else{
@@ -31,7 +31,7 @@ if ($result->num_rows > 0){
     }
 }
 else{
-    echo "errore";
+    header("Location: ../index.html");
     exit;
 }       
 ?>
