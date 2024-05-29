@@ -1,5 +1,6 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Jacquard+12&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
 .icona {
     font-size: 20px;
     text-decoration: none;
@@ -27,4 +28,20 @@ body{
     box-shadow: 0 0 25px #0ef;
     overflow: hidden;
     background: #081b29;
+}
+
+.about{
+    padding: 20px;
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
+    background: transparent;
+    border: 2px solid #0ef;
+    box-shadow: 0 0 25px #0ef;
+    overflow: hidden;
+    background: #081b29;
+    color: aliceblue;
+    font-family: "Roboto", sans-serif;
+    font-weight: 700;
+    font-style: normal;    
 }
