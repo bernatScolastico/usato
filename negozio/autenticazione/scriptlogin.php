@@ -1,7 +1,7 @@
 <?php
 include("../connessione.php");
 session_start();
-
+$_SESSION["errato"] = false;
 
 $email = $_POST["email"];
 $password = $_POST["password"];
@@ -21,8 +21,9 @@ if ($result->num_rows > 0){
     $user = $row["Email"];
 
 
-    if(!$pass==$password || !$user==$email){
-        header("Location: ../index.html");
+    if(!$pass==$anony || !$user==$email){
+        $_SESSION["errato"] = true;
+        header("Location: ../index.php");
         exit;
     }
     else{
@@ -31,7 +32,8 @@ if ($result->num_rows > 0){
     }
 }
 else{
-    header("Location: ../index.html");
+    $_SESSION["errato"] = true;
+    header("Location: ../index.php");
     exit;
 }       
 ?>
