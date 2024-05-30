@@ -65,11 +65,6 @@ session_start();
                     <label>Cognome</label>
                     <i class='bx bxs-user'></i>
                 </div>
-                <div class="input-box animation" style="--i:19; --j:2;">
-                    <input type="text" name="cf" required>
-                    <label>Codice Fiscale</label>
-                    <i class='bx bxs-envelope'></i>
-                </div>
                 <div class="input-box animation" style="--i:20; --j:3;">
                     <input type="password" name="password" required>
                     <label>Password</label>

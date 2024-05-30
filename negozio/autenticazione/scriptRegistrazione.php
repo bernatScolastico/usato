@@ -4,7 +4,6 @@ session_start();
 
 $email = $_POST["email"];
 $password = $_POST["password"];
-$cf = $_POST["cf"];
 $nome = $_POST["nome"];
 $cognome = $_POST["cognome"];
 $classe = $_POST["classe"];
@@ -12,7 +11,7 @@ $eta = $_POST["eta"];
 
 $anony = hash ("sha256", $password);
 
-$sql = "SELECT Email FROM utente WHERE Email= '$email'";
+$sql = "SELECT email FROM utente WHERE email= '$email'";
 $result = $connessione->query($sql);
 if($result->num_rows > 0){
     echo "ERRORE";

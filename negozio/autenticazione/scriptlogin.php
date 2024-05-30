@@ -10,16 +10,15 @@ $anony = hash ("sha256", $password);
 $_SESSION["email"] = $email;
 $_SESSION["password"] = $password;
 
-$sql = "SELECT Email, Password FROM utente WHERE Email= '$email'";
+$sql = "SELECT ID, email, password FROM utente WHERE email= '$email'";
 
 $result = $connessione->query($sql);
 
-
 if ($result->num_rows > 0){
     $row = $result->fetch_assoc();
-    $pass= $row["Password"];
-    $user = $row["Email"];
-
+    $pass= $row["password"];
+    $user = $row["email"];
+    $_SESSION["id"] = intval($row["ID"]);
 
     if(!$pass==$anony || !$user==$email){
         $_SESSION["errato"] = "Username o password errati";
@@ -28,7 +27,7 @@ if ($result->num_rows > 0){
     }
     else{
         $_SESSION["utente"] = $email;
-        header("Location: ../home.php");
+        header("Location: ../pages/home.php");
         exit;
     }
 }
