@@ -1,5 +1,4 @@
 <?php
-session_destroy();
 session_start();
 ?>
 <!DOCTYPE html>
@@ -9,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Registration Form in HTML and CSS | Codehal</title>
+    <title>Login</title>
     <link rel="stylesheet" href="s.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -22,7 +21,7 @@ session_start();
 
         <div class="form-box login">
             <h2 class="animation" style="--i:0; --j:21;">Login</h2>
-            <form action="/autenticazione/scriptlogin.php" method="POST">
+            <form action="autenticazione/scriptlogin.php" method="POST">
                 <div class="input-box animation" style="--i:1; --j:22;">
                     <input type="text" name="email" required>
                     <label>Username</label>
@@ -34,8 +33,8 @@ session_start();
                     <i class='bx bxs-lock-alt'></i>
                 </div>
                 <?php
-                if($_SESSION["errato"]){
-                    echo "<p> La password o l'username sono errati riprova </p>";
+                if(isset($_SESSION["errato"])){
+                    echo "<p>" . $_SESSION["errato"]."</p>";
                 }
                 ?>
                 <button type="submit" class="btn animation" style="--i:3; --j:24;">Login</button>

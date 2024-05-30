@@ -22,17 +22,18 @@ if ($result->num_rows > 0){
 
 
     if(!$pass==$anony || !$user==$email){
-        $_SESSION["errato"] = true;
+        $_SESSION["errato"] = "Username o password errati";
         header("Location: ../index.php");
         exit;
     }
     else{
-        header("Location: ../home.html");
+        $_SESSION["utente"] = $email;
+        header("Location: ../home.php");
         exit;
     }
 }
 else{
-    $_SESSION["errato"] = true;
+    $_SESSION["errato"] = "Username o password errati";
     header("Location: ../index.php");
     exit;
 }       

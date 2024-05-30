@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+
+if(!isset($_SESSION["utente"])){
+  $_SESSION["errato"] = "No no devi fare il login furbacchione ";
+  header("Location: index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
