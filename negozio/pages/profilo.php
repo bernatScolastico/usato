@@ -1,3 +1,12 @@
+<?php
+session_start();
+include("../connessione.php");
+
+if(!isset($_SESSION["utente"])){
+  $_SESSION["errato"] = "No no devi fare il login furbacchione ";
+  header("Location: ../index.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +15,93 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
+    <style>
+    .centered-content {
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+        }
+
+        .foto_profilo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            min-width: 450px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .buttons-container {
+            display: none;
+            margin: auto;
+        }
+
+        .buttons-container.show-buttons {
+            display: block;
+        }
+
+        .buttons-container a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .buttons-container a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        h1,
+        h3,
+        p {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -48,10 +144,49 @@
     </nav>
   </section>
 
-  <div>
+  <div class="profilo">
         <div class="about">
+          <?php
+              $sql = "SELECT nome, cognome FROM utente WHERE id = " . $_SESSION["id"] . "";
+              $result = $connessione->query($sql);
+              $row = $result->fetch_assoc();
+              echo "<h1>Benvenuto/a " . $row["nome"] . " " . $row["cognome"] . "</h1>";
+              echo "<br>"; 
+            ?>
 
-            <button class="btn animation"><a href="../funzioni/logout.php"></a></button>
+<div class="card-body">
+            <!-- dashboard articoli -->
+            <?php
+            $ut = $_SESSION["id"];
+            $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip FROM annuncio
+                        JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
+                        JOIN utente ON utente.ID = annuncio.ID_utente";
+
+            $result = $connessione->query($sql);
+            if ($result) {
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $nome = $row['nome'];
+                        $foto = $row['foto'];
+                        $tipologia = $row['tip'];
+                        $ID = $row['ID'];
+                        echo "<div class=\"card centered-content\">
+                        <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
+                                <h3>$nome</h3>
+                                <p>$tipologia</p>
+                                <button class=\"btn btn-danger buttons-container\"><a href=\"./eliminaAnnuncio.php?idArt=$ID&ut=$ut\">Elimina</a></button>
+                            </div>";
+                    }
+                } else {
+                    echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
+                }
+            } else {
+                echo "<h1>Errore nella query</h1>";
+                echo "<p>$sql</p>";
+            }
+            ?>
+        </div>
+            <a href="../funzioni/logout.php">LOGOUT</a>
         </div>
     </div>
 

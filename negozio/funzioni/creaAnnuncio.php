@@ -22,7 +22,7 @@ if (!isset($_SESSION["utente"]))
 <section class="py-5">
     <nav class="navbar navbar-expand-lg nav">
       <div class="container">
-        <a class="navbar-brand" href="home.php">
+        <a class="navbar-brand" href="../pages/home.php">
         <img class="img-fluid text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2" height="100" src="../img/icona.jpeg" width="100"></a> 
         <h2 style="font-family: 'Dancing Script', cursive;">MEUCCI BOUTIQUE</h2>
         <button style="background-color: aliceblue !important;" aria-controls="navbarSupportedContent6" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent6" data-bs-toggle="collapse" type="button">
@@ -31,21 +31,21 @@ if (!isset($_SESSION["utente"]))
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="about.html">About</a>
+              <a class="nav-link text-light" href="../pages/about.html">About</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="">Shop</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../funzioni/creaAnnuncio.php">Aggiungi</a>
+              <a class="nav-link text-light" href="#">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="contact.html">Contact</a>
+              <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
             </li>
           </ul>
 
           <div class="d-flex">
-            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="../pages/profilo.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
               <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
             </svg></a>
 
