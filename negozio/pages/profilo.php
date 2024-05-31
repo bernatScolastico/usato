@@ -27,15 +27,15 @@
               <a class="nav-link text-light" href="">Shop</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
+              <a class="nav-link text-light" href="../funzioni/creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="#">Contact</a>
+              <a class="nav-link text-light" href="contact.html">Contact</a>
             </li>
           </ul>
 
           <div class="d-flex">
-            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="profilo.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
               <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
             </svg></a>
 
@@ -48,41 +48,12 @@
     </nav>
   </section>
 
+  <div>
+        <div class="about">
 
-  
-  <div class="container text-center">
-    <div class="row">
-        <div class="col">
-          <div class="card schedeEs" style="width: 20rem;">
-            <img src="../img/avatar.png" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">BERNAT TOMMASO</h5>
-              <p class="card-text">Front-end Developer, CEO, Manager</p>
-            </div>
-          </div>
-        </div>
-
-
-          <div class="col">
-            <div class="card schedeEs" style="width: 20rem;">
-              <img src="../img/avatar.png" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">MASI NICCOLO</h5>
-                <p class="card-text">Back-end Developer, Manager</p>
-              </div>
-            </div>
-          </div>
-
-        <div class="col ">
-            <div class="card schedeEs" style="width: 20rem;">
-              <img src="../img/avatar.png" class="card-img-top" alt="...">
-              <div class="card-body">
-                <h5 class="card-title">MOLLA XHULIANO</h5>
-                <p class="card-text">Manager, Designer</p>
-              </div>
+            <button class="btn animation"><a href="../funzioni/logout.php"></a></button>
         </div>
     </div>
-</div>
 
       
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

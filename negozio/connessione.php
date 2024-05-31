@@ -5,9 +5,7 @@ $connessione = new mysqli("localhost", "root", "", "bunda");
 if($connessione->connect_error){
     echo "ERRORE";
 }
-else{
-    echo "SUCCESSO";
-}
+
 
 ?>
 
