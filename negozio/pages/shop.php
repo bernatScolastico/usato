@@ -1,7 +1,6 @@
 <?php
 session_start();
 include("../connessione.php");
-
 if(!isset($_SESSION["utente"])){
   $_SESSION["errato"] = "No no devi fare il login furbacchione ";
   header("Location: ../index.php");
@@ -131,7 +130,7 @@ if(!isset($_SESSION["utente"])){
           </ul>
 
           <div class="d-flex">
-            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="profilo.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
               <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
             </svg></a>
 
@@ -143,59 +142,63 @@ if(!isset($_SESSION["utente"])){
       </div>
     </nav>
   </section>
+  <style>
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.grid-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+</style>
 
-  <div class="profilo">
-        <div class="about">
-          <?php
-              $sql = "SELECT nome, cognome FROM utente WHERE id = " . $_SESSION["id"] . "";
-              $result = $connessione->query($sql);
-              $row = $result->fetch_assoc();
-              echo "<h1>Benvenuto/a " . $row["nome"] . " " . $row["cognome"] . "</h1>";
-              echo "<br>"; 
-            ?>
+<div class="profilo">
+  <div class="about">
+    <?php
+    echo "<h1>Shop Meucci Boutique</h1>";
+    echo "<br>"; 
+    ?>
+    <div class="card-body grid-container">
+      <!-- dashboard articoli -->
+      <?php
+      $ut = $_SESSION["id"];
+      $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip FROM annuncio
+                  JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
+                  JOIN utente ON utente.ID = annuncio.ID_utente
+                  WHERE utente.ID != $ut and annuncio.stato = 'disponibile'
+                  ";
 
-<div class="card-body">
-            <!-- dashboard articoli -->
-            <?php
-            $ut = $_SESSION["id"];
-            $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip FROM annuncio
-                        JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
-                        JOIN utente ON utente.ID = annuncio.ID_utente
-                        WHERE utente.ID = $ut AND annuncio.stato = 'disponibile'";
+      $result = $connessione->query($sql);
+      if ($result) {
+          if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc()) {
+                  $nome = $row['nome'];
+                  $foto = $row['foto'];
+                  $tipologia = $row['tip'];
+                  $ID = $row['ID'];
 
-            $result = $connessione->query($sql);
-            if ($result) {
-                if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $nome = $row['nome'];
-                        $foto = $row['foto'];
-                        $tipologia = $row['tip'];
-                        $ID = $row['ID'];
-                        echo "<div class=\"card centered-content\">
-                        <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
-                                <h3>$nome</h3>
-                                <p>$tipologia</p>
-                                <button><a class=\"text-danger\" href=\"../funzioni/eliminaAnnuncio.php?AnnuncioID=$ID&ut=$ut\">Elimina Annuncio</a></button><br>
-                                <button><a class=\"text-primary-emphasis\" href=\"../funzioni/Vediofferte.php?AnnuncioID=$ID;&ut=$ut\"> Vedi Offerte</a></button><br>
-                            </div>";
-                    }
-                } else {
-                    echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
-                }
-            } else {
-                echo "<h1>Errore nella query</h1>";
-                echo "<p>$sql</p>";
-            }
-
-            ?>
-        </div>
-            <button><a class="text-primary-emphasis" href="../funzioni/VediAnnunciVenduti.php?AnnuncioID=$ID;&ut=$ut"> Vedi Annunci Venduti</a></button> <br><br>
-            <a href="../funzioni/logout.php">LOGOUT</a> <br>
-            
-        </div>
-    </div>
-
+                  echo "<div class=\"grid-item\">
+                  <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
+                          <h3>$nome</h3>
+                          <p>$tipologia</p>
+                          <button><a class=\"text-primary-emphasis\" href=\"../funzioni/aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
+                      </div>";
+              }
+          } else {
+              echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
+          }
+      } else {
+          echo "<h1>Errore nella query</h1>";
+          echo "<p>$sql</p>";
+      }
       
+      ?>
+
+  </div>
+</div>
+  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
 </body>

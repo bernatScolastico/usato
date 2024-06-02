@@ -1,9 +1,7 @@
 <?php
 session_start();
-
-
 if(!isset($_SESSION["utente"])){
-  $_SESSION["errato"] = "No no devi fare il login furbacchione ";
+  $_SESSION["errato"] = "devi fare il login prima di accedere alla home";
   header("Location: ../index.php");
 }
 ?>
@@ -33,7 +31,7 @@ if(!isset($_SESSION["utente"])){
                 <a class="nav-link text-light" href="about.html">About</a>
               </li>
               <li class="nav-item me-4">
-                <a class="nav-link text-light" href="">Shop</a>
+                <a class="nav-link text-light" href="shop.php">Shop</a>
               </li>
               <li class="nav-item me-4">
                 <a class="nav-link text-light" href="../funzioni/creaAnnuncio.php">Aggiungi</a>

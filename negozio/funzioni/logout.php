@@ -1,7 +1,13 @@
 <?php 
 session_start();
 include("../connessione.php");
-session_destroy();
-header("Location: ../index.php");
 
+// Check if session exists before destroying it
+if (session_id()) {
+    session_destroy();
+}
+
+// Redirect to the homepage
+header("Location: ../index.php");
+exit();
 ?>

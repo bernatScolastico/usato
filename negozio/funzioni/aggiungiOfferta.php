@@ -1,8 +1,13 @@
 <?php
 session_start();
 include ("../connessione.php");
-if (!isset($_SESSION["utente"]))
+if (!isset($_SESSION["utente"])){
     header("Location: ../index.php");
+}
+    
+if (isset($_GET['AnnuncioID'])) {
+      $_SESSION['AnnuncioID'] = $_GET['AnnuncioID'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +16,10 @@ if (!isset($_SESSION["utente"]))
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreaAnnuncio</title>
+    <title>CreaOfferta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-      <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="s.css">
 </head>
 
 <body>
@@ -36,7 +42,7 @@ if (!isset($_SESSION["utente"]))
               <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="#">Aggiungi</a>
+              <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
@@ -62,41 +68,17 @@ if (!isset($_SESSION["utente"]))
             <div class="col-md-6">
                 <div class="card schedeEs">
                     <div class="card-header text-center">
-                        <h5 class="mb-0">Crea un nuovo Annuncio</h5>
+                        <h5 class="mb-0">Fai una Proposta</h5>
                     </div>
                     <div class="card-body">
-                        <form action="scriptAnnuncio.php" method="post" enctype="multipart/form-data"
+                        <form action="scriptOfferta.php" method="post" enctype="multipart/form-data"
                             class="mt-4">
                             <div class="form-group">
-                                <label for="nome">Nome Articolo</label>
-                                <input type="text" name="nome" class="form-control" required>
+                                <label for="prezzo">Prezzo Proposta</label>
+                                <input type="text" name="prezzo" class="form-control" required>
                             </div>
                             <br>
-                            <div class="form-group">
-                                <label for="descrizione">Descrizione Oggetto</label>
-                                <textarea name="descrizione" class="form-control" cols="50" rows="5" maxlength="250"
-                                    placeholder="Max. 250 Caratteri"></textarea>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="file">Foto dell'Articolo</label>
-                                <input type="file" name="file" class="form-control-file" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="tipologia">Tipologia dell'Articolo</label>
-                                <select name="tipologia" class="form-control" required>
-                                    <option value="0" hidden></option>
-                                    <?php
-                                    $sql = "SELECT * FROM tipologia";
-                                    $result = $connessione->query($sql);
-                                    while ($row = $result->fetch_assoc())
-                                        echo "<option value='" . $row["ID"] . "'>" . $row["nome"] . "</option>";
-                                    
-                                    ?>
-                                </select>
-                                <br>
-                            </div>
+                           
                             <button type="submit" class="btn btn-primary btn-block">INVIA</button>
                         </form>
                     </div>

@@ -1,8 +1,17 @@
 <?php
 session_start();
 include ("../connessione.php");
-if (!isset($_SESSION["utente"]))
+if (!isset($_SESSION["utente"])){
     header("Location: ../index.php");
+}
+    
+if (isset($_GET['AnnuncioID'])) {
+      $_SESSION['AnnuncioID'] = $_GET['AnnuncioID'];
+}
+if (isset($_GET['ut'])) {
+    $_SESSION['ut'] = $_GET['ut'];
+}
+$ut = $_SESSION['ut'];
 ?>
 
 <!DOCTYPE html>
@@ -11,9 +20,97 @@ if (!isset($_SESSION["utente"]))
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreaAnnuncio</title>
+    <title>CreaOfferta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-      <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+    .centered-content {
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            margin-top: 20px;
+        }
+
+        .foto_profilo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 600px;
+            min-width: 450px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .buttons-container {
+            display: none;
+            margin: auto;
+        }
+
+        .buttons-container.show-buttons {
+            display: block;
+        }
+
+        .buttons-container a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .buttons-container a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        img {
+            display: block;
+            margin: 20px auto;
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        h1,
+        h3,
+        p {
+            text-align: center;
+        }
+    </style>
+    
 </head>
 
 <body>
@@ -36,7 +133,7 @@ if (!isset($_SESSION["utente"]))
               <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="#">Aggiungi</a>
+              <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
@@ -56,54 +153,57 @@ if (!isset($_SESSION["utente"]))
       </div>
     </nav>
   </section>
+<div class="profilo">
+    <div class="about">
+        <?php 
+            echo "<h1>Annunci Venduti</h1>";
+            echo "<br>"; 
+        ?>
 
-    <div class="container" style="text-align:center">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card schedeEs">
-                    <div class="card-header text-center">
-                        <h5 class="mb-0">Crea un nuovo Annuncio</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="scriptAnnuncio.php" method="post" enctype="multipart/form-data"
-                            class="mt-4">
-                            <div class="form-group">
-                                <label for="nome">Nome Articolo</label>
-                                <input type="text" name="nome" class="form-control" required>
+<div class="container">
+            <!-- dashboard articoli -->
+            <?php
+        //fai una query per prendere tutti gli annunci venduti
+        $ID_utente = $_SESSION["id"];
+        $sql = "SELECT annuncio.nome, annuncio.foto, annuncio.ID, tipologia.nome as tip, proposta.prezzo as stat FROM annuncio
+                JOIN tipologia ON annuncio.ID_tipologia = tipologia.ID
+                JOIN proposta ON proposta.ID_annuncio = annuncio.ID
+                WHERE annuncio.stato = 'venduto' AND annuncio.ID_utente= $ID_utente AND proposta.stato = 'accettato'";
+        $result = $connessione->query($sql);
+        if ($result) {
+            if ($result->num_rows > 0) {
+                echo "<div class='row'>";
+                while ($row = $result->fetch_assoc()) {
+                    $nome = $row['nome'];
+                    $foto = $row['foto'];
+                    $tipologia = $row['tip'];
+                    $ID = $row['ID'];
+                    $prezzo = $row['stat'];
+
+                    echo "<div class='col-md-6 mb-4'>
+                            <div class='card'>
+                                <a href='./articolo.php?idArt=$ID&ut=$ut'>
+                                    <img src='$foto' class='card-img-top' alt='$nome'>
+                                </a>
+                                <div class='card-body'>
+                                    <h5 class='card-title'>$nome</h5>
+                                    <p class='card-text'>$tipologia</p>
+                                    <p class='card-text'>Venduto a $prezzo €</p>
+                                </div>
                             </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="descrizione">Descrizione Oggetto</label>
-                                <textarea name="descrizione" class="form-control" cols="50" rows="5" maxlength="250"
-                                    placeholder="Max. 250 Caratteri"></textarea>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="file">Foto dell'Articolo</label>
-                                <input type="file" name="file" class="form-control-file" required>
-                            </div>
-                            <br>
-                            <div class="form-group">
-                                <label for="tipologia">Tipologia dell'Articolo</label>
-                                <select name="tipologia" class="form-control" required>
-                                    <option value="0" hidden></option>
-                                    <?php
-                                    $sql = "SELECT * FROM tipologia";
-                                    $result = $connessione->query($sql);
-                                    while ($row = $result->fetch_assoc())
-                                        echo "<option value='" . $row["ID"] . "'>" . $row["nome"] . "</option>";
-                                    
-                                    ?>
-                                </select>
-                                <br>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">INVIA</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+                          </div>";
+                }
+                echo "</div>";
+            } else {
+                echo "<p style='color:red'>NESSUN ANNUNCIO PRESENTE</p>";
+            }
+        } else {
+            echo "<h1>Errore nella query</h1> . $connessione->error;";
+            echo "<p>$sql</p>";
+        }
+
+        ?>
     </div>
+</div>
 </body>
-
 </html>

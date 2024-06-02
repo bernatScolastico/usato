@@ -5,35 +5,39 @@ $_SESSION["errato"] = false;
 
 $email = $_POST["email"];
 $password = $_POST["password"];
-$anony = hash ("sha256", $password);
+$anony = hash("sha256", $password);
 
 $_SESSION["email"] = $email;
 $_SESSION["password"] = $password;
 
-$sql = "SELECT ID, email, password FROM utente WHERE email= '$email'";
+// Preparare una dichiarazione SQL per evitare SQL injection
+$sql = "SELECT ID, email, password FROM utente WHERE email = ?";
+$stmt = $connessione->prepare($sql);
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-$result = $connessione->query($sql);
-
-if ($result->num_rows > 0){
+if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
-    $pass= $row["password"];
+    $pass = $row["password"];
     $user = $row["email"];
     $_SESSION["id"] = intval($row["ID"]);
-
-    if(!$pass==$anony || !$user==$email){
+    
+    if ($pass !== $anony || $user !== $email) {
         $_SESSION["errato"] = "Username o password errati";
         header("Location: ../index.php");
         exit;
-    }
-    else{
+    } else {
         $_SESSION["utente"] = $email;
         header("Location: ../pages/home.php");
         exit;
     }
-}
-else{
+} else {
     $_SESSION["errato"] = "Username o password errati";
     header("Location: ../index.php");
     exit;
-}       
+}
+
+$stmt->close();
+$connessione->close();
 ?>
