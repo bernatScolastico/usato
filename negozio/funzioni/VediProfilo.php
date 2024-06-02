@@ -61,7 +61,7 @@ $utenteAttuale = $_SESSION["utente"];
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/about.html">About</a>
+              <a class="nav-link text-light" href="../pages/about.php">About</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
@@ -70,7 +70,7 @@ $utenteAttuale = $_SESSION["utente"];
               <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
+              <a class="nav-link text-light" href="../pages/contact.php">Contact</a>
             </li>
           </ul>
 
