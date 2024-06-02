@@ -85,8 +85,17 @@ if (isset($_GET['AnnuncioID'])) {
                                 <input type="text" name="prezzo" class="form-control" required>
                             </div>
                             <br>
-                           
-                            <button type="submit" class="btn btn-primary btn-block">INVIA</button>
+                            <div class="container">
+                              <div class="row">
+                                <div class="col">
+                                <button type="button" class="btn btn-danger"><a href="../pages/shop.php"> Indietro</a></button>
+                                </div>
+                                <div class="col">
+                                <button type="submit" class="btn btn-primary btn-block">INVIA</button> 
+                                </div>
+                              </div>
+                              </div>
+                            
                         </form>
                     </div>
                 </div>
