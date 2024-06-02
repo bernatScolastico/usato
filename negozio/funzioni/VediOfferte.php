@@ -4,7 +4,7 @@ include ("../connessione.php");
 // Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
     // Imposta un messaggio di errore nella sessione
-    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+    $_SESSION["errato"] = "devi fare il login prima di accedere al negozio";
   
     // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
@@ -102,16 +102,15 @@ $result = $stmt->get_result();
 <div class="container">
     
     <?php
+    echo"<h1>Offerte disponibili</h1>";
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $utenteNome = $row['nome'];
             $Id = $row['ID'];
             $prezzo = $row['prezzo'];
             ?>
-            <h1>Offerte disponibili</h1>
             <div class="annuncio">
                 <h3><?php echo "Offerta fatta da: $utenteNome"; ?></h3>
-                <p><?php echo "ID: $Id"; ?></p>
                 <p><?php echo "Ti ha offerto: $prezzo". "€"; ?></p>
                 <button type="button" type="btn btn-success"><a href="../funzioni/accettaOfferta.php?ID=<?php echo $Id; ?>">Accetta</a> </button>
             </div>

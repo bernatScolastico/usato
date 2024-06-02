@@ -1,10 +1,11 @@
 <?php 
 session_start();
 include ("../connessione.php");
+
 // Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
     // Imposta un messaggio di errore nella sessione
-    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+    $_SESSION["errato"] = "devi fare il login prima di accedere al negozio";
   
     // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
@@ -12,6 +13,7 @@ if (!isset($_SESSION["utente"])) {
     // Assicurati che lo script si fermi dopo il reindirizzamento
     exit();
 }
+
 $ID_utente = $_SESSION["id"];
 $ID_proposta = $_GET["ID"];
 
@@ -29,15 +31,21 @@ if ($result->num_rows > 0) {
     $sql_annuncio = "UPDATE annuncio SET stato = 'venduto' WHERE ID = $ID_annuncio";
 
     if ($connessione->query($sql_accetta) === TRUE and $connessione->query($sql_rifiuta) === TRUE and $connessione->query($sql_annuncio) === TRUE){
+        $_SESSION["alertOfferta"] = "Offerta accettata";
         header("Location: ../pages/profilo.php");
-        exit;
+        exit();
     } else {
-        echo "Errore durante l'accettazione dell'offerta: " . $connessione->error;
+        $_SESSION["alertOfferta"] = "Errore durante l'accettazione dell'offerta: " . $connessione->error;
+        header("Location: ../pages/profilo.php");
+        exit();
     }
 } else {
-    echo "Nessuna offerta trovata";
+    $_SESSION["alertOfferta"] = "Nessuna offerta trovata";
+    header("Location: ../pages/profilo.php");
+    exit();
 }
 ?>
+
 
 
 

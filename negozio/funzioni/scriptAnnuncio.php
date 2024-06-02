@@ -1,14 +1,13 @@
 <?php
 session_start();
 include ("../connessione.php");
+
 // Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
     // Imposta un messaggio di errore nella sessione
-    $_SESSION["errato"] = "No no devi fare il login furbacchione";
-  
+    $_SESSION["errato"] = "devi fare il login prima di accedere al negozio";
     // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
-    
     // Assicurati che lo script si fermi dopo il reindirizzamento
     exit();
 }
@@ -25,14 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Verifica l'estensione del file
     $imageFileType = strtolower(pathinfo($img, PATHINFO_EXTENSION));
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-        echo "Errore: sono ammessi solo JPG, JPEG, PNG";
-        exit;
+        $_SESSION["alert"] = ["type" => "error", "message" => "Errore: sono ammessi solo JPG, JPEG, PNG"];
+        header("Location: creaAnnuncio.php");
+        exit();
     }
 
     // Carica il file
     if (!move_uploaded_file($_FILES["file"]["tmp_name"], $img)) {
-        echo "Errore durante il caricamento del file.";
-        exit;
+        $_SESSION["alert"] = ["type" => "error", "message" => "Errore durante il caricamento del file"];
+        header("Location: creaAnnuncio.php");
+        exit();
     }
 
     // Utilizza una transazione per garantire atomicità
@@ -54,18 +55,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->close();
 
             $connessione->commit();
-
+            $_SESSION["alert"] = ["type" => "success", "message" => "Annuncio inserito con successo"];
             header("Location: ../pages/profilo.php");
-            exit;
+            exit();
         } else {
-            echo "Un annuncio con lo stesso nome esiste già.";
+            $_SESSION["alert"] = ["type" => "error", "message" => "Un annuncio con lo stesso nome esiste già."];
             $connessione->rollback();
+            header("Location: creaAnnuncio.php");
+            exit();
         }
     } catch (Exception $e) {
         $connessione->rollback();
-        echo "Errore durante l'inserimento dell'annuncio: " . $e->getMessage();
+        $_SESSION["alert"] = ["type" => "error", "message" => "Errore durante l'inserimento dell'annuncio: " . $e->getMessage()];
+        header("Location: creaAnnuncio.php");
+        exit();
     }
 } else {
-    echo "Richiesta non valida.";
+    $_SESSION["alert"] = ["type" => "error", "message" => "Richiesta non valida."];
+    header("Location: creaAnnuncio.php");
+    exit();
 }
 ?>

@@ -4,7 +4,7 @@ include ("../connessione.php");
 // Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
     // Imposta un messaggio di errore nella sessione
-    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+    $_SESSION["errato"] = "devi fare il login prima di accedere al negozio";
   
     // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");

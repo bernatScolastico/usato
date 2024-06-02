@@ -4,7 +4,7 @@ include ("../connessione.php");
 // Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
     // Imposta un messaggio di errore nella sessione
-    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+    $_SESSION["errato"] = "devi fare il login prima di accedere al negozio";
   
     // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
@@ -95,49 +95,64 @@ $ut = $_SESSION['ut'];
         ?>
 
 <div class="container">
-            <!-- dashboard articoli -->
             <?php
-        //fai una query per prendere tutti gli annunci venduti
         $ID_utente = $_SESSION["id"];
-        $sql = "SELECT annuncio.nome, annuncio.foto, annuncio.ID, tipologia.nome as tip, proposta.prezzo as stat FROM annuncio
+        $sql = "SELECT annuncio.nome AS annuncio_nome, annuncio.foto, annuncio.ID, tipologia.nome AS tip, proposta.prezzo, proposta.ID_utente AS stat 
+                FROM annuncio
                 JOIN tipologia ON annuncio.ID_tipologia = tipologia.ID
                 JOIN proposta ON proposta.ID_annuncio = annuncio.ID
-                WHERE annuncio.stato = 'venduto' AND annuncio.ID_utente= $ID_utente AND proposta.stato = 'accettato'";
-        $result = $connessione->query($sql);
-        if ($result) {
-            if ($result->num_rows > 0) {
-                echo "<div class='row'>";
-                while ($row = $result->fetch_assoc()) {
-                    $nome = $row['nome'];
-                    $foto = $row['foto'];
-                    $tipologia = $row['tip'];
-                    $ID = $row['ID'];
-                    $prezzo = $row['stat'];
-
-                    echo "
-                    <div class='container'>
-                    <div class='row'>
-                            <div class='card card-annuncio'>
-                                <a href='./articolo.php?idArt=$ID&ut=$ut'>
-                                    <img src='$foto' class='card-img-top' alt='$nome'>
-                                </a>
-                                <div class='card-body'>
-                                    <h5 class='card-title'>$nome</h5>
-                                    <p class='card-text'>$tipologia</p>
-                                    <p class='card-text'>Venduto a $prezzo €</p>
-                                </div>
-                            </div>
-                          </div>
-                          </div>";
-                }
-                echo "</div>";
-            } else {
-                echo "<p style='color:red'>NESSUN ANNUNCIO PRESENTE</p>";
-            }
-        } else {
-            echo "<h1>Errore nella query</h1> . $connessione->error;";
-            echo "<p>$sql</p>";
+                WHERE annuncio.stato = 'venduto' AND annuncio.ID_utente = ? AND proposta.stato = 'accettato'";
+        $sql1 = "SELECT nome, cognome FROM utente WHERE ID = ?";
+    
+        if ($stmt = $connessione->prepare($sql)) {
+            $stmt->bind_param("i", $ID_utente);
+            $stmt->execute();
+            $result = $stmt->get_result();
         }
+    
+        if ($stmt1 = $connessione->prepare($sql1)) {
+            $stmt1->bind_param("i", $ID_utente);
+            $stmt1->execute();
+            $result1 = $stmt1->get_result();
+        }
+    
+        if ($result && $result1 && $result->num_rows > 0 && $result1->num_rows > 0) {
+            $row1 = $result1->fetch_assoc();
+            $nomeUtente = $row1['nome'];
+            $cognomeUtente = $row1['cognome'];
+    
+            echo "<div class='row'>";
+            while ($row = $result->fetch_assoc()) {
+                $nome = $row['annuncio_nome'];
+                $foto = $row['foto'];
+                $tipologia = $row['tip'];
+                $ID = $row['ID'];
+                $prezzo = $row['prezzo'];
+    
+                echo "
+                <div class='container'>
+                    <div class='row'>
+                        <div class='card card-annuncio'>
+                            <a href='./articolo.php?idArt=$ID&ut=$ID_utente'>
+                                <img src='$foto' class='card-img-top' alt='$nome'>
+                            </a>
+                            <div class='card-body'>
+                                <h5 class='card-title'>$nome</h5>
+                                <p class='card-text'>$tipologia</p>
+                                <p class='card-text'>Venduto a $prezzo €</p>
+                                <p class='card-text'>Acquirente: $nomeUtente $cognomeUtente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+            }
+            echo "</div>";
+        } else {
+            echo "Nessun risultato trovato.";
+        }
+    
+        $stmt->close();
+        $stmt1->close();
 
         ?>
     </div>
