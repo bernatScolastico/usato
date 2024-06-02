@@ -1,10 +1,17 @@
 <?php
 session_start();
 include ("../connessione.php");
-if (!isset($_SESSION["utente"])){
+// Controlla se l'utente è autenticato
+if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
-}
     
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
+}
 if (isset($_GET['AnnuncioID'])) {
       $_SESSION['AnnuncioID'] = $_GET['AnnuncioID'];
 }
@@ -22,94 +29,21 @@ $utenteAttuale = $_SESSION["utente"];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vedi Profilo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
     <style>
-    .centered-content {
-            width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            margin-top: 20px;
-        }
-
-        .foto_profilo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 600px;
-            min-width: 450px;
-        }
-
         .card img {
             width: 100%;
             height: auto;
             max-width: 200px;
             max-height: 200px;
         }
-
-        a {
-            color: white;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .buttons-container {
-            display: none;
-            margin: auto;
-        }
-
-        .buttons-container.show-buttons {
-            display: block;
-        }
-
-        .buttons-container a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .buttons-container a:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
         img {
             display: block;
             margin: 20px auto;
             max-width: 200px;
             max-height: 200px;
-        }
-
-        h1,
-        h3,
-        p {
-            text-align: center;
         }
     </style>
 </head>
@@ -160,17 +94,15 @@ $utenteAttuale = $_SESSION["utente"];
               $sql = "SELECT nome, cognome, classe, eta, email FROM utente WHERE id = '$idUtenteAnnuncio'";
               $result = $connessione->query($sql);
               $row = $result->fetch_assoc();
-              echo "<h1>Profilo</h1>";
+              echo "<h1>Profilo di " .$row["nome"] . " ".$row["cognome"]."</h1>";
+              echo "<p> I SUOI DATI SONO:" ."</p>";
               echo "<p>Email:  " . $row["email"] . "</p>";
-              echo "<p>Nome:  " . $row["nome"] . "</p>";
-              echo "<p>Cognome:  " . $row["cognome"] . "</p>";
               echo "<p>Classe:  " . $row["classe"] . "</p>";
               echo "<p>Età:  " . $row["eta"] . "</p>";
-              echo "<br>"; 
+              echo "<br>";
             ?>
 
 <div class="card-body">
-            <!-- dashboard articoli -->
             <?php
             echo "<h1>Annunci</h1>";
             $ut = $_SESSION["id"];
@@ -187,12 +119,12 @@ $utenteAttuale = $_SESSION["utente"];
                         $foto = $row['foto'];
                         $tipologia = $row['tip'];
                         $ID = $row['ID'];
-                        echo "<div class=\"card centered-content\">
-                        <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
+                        echo "<div class=\"card card-annuncio\">
+                          <img src=\"$foto\">
                                 <h3>$nome</h3>
                                 <p>$tipologia</p>
-                                <button><a class=\"text-primary-emphasis\" href=\"aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
-                            </div>";
+                                <button type=\"button\" class=\"btn btn-success\"><a href=\"aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
+                        </div>";
                     }
                 } else {
                     echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
@@ -206,7 +138,9 @@ $utenteAttuale = $_SESSION["utente"];
 
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
 
 
 

@@ -1,9 +1,16 @@
 <?php
 session_start();
-include("../connessione.php");
-if(!isset($_SESSION["utente"])){
-  $_SESSION["errato"] = "No no devi fare il login furbacchione ";
-  header("Location: ../index.php");
+include ("../connessione.php");
+// Controlla se l'utente è autenticato
+if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
+    header("Location: ../index.php");
+    
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -11,36 +18,10 @@ if(!isset($_SESSION["utente"])){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
     <style>
-    .centered-content {
-            width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            margin-top: 20px;
-        }
-
-        .foto_profilo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 600px;
-            min-width: 450px;
-        }
 
         .card img {
             width: 100%;
@@ -59,35 +40,7 @@ if(!isset($_SESSION["utente"])){
             text-decoration: none;
         }
 
-        .buttons-container {
-            display: none;
-            margin: auto;
-        }
-
-        .buttons-container.show-buttons {
-            display: block;
-        }
-
-        .buttons-container a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .buttons-container a:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
+        
         img {
             display: block;
             margin: 20px auto;
@@ -95,11 +48,7 @@ if(!isset($_SESSION["utente"])){
             max-height: 200px;
         }
 
-        h1,
-        h3,
-        p {
-            text-align: center;
-        }
+
     </style>
 </head>
 <body>
@@ -107,7 +56,7 @@ if(!isset($_SESSION["utente"])){
   <section class="py-5">
     <nav class="navbar navbar-expand-lg nav">
       <div class="container">
-        <a class="navbar-brand" href="home.php">
+        <a class="navbar-brand" href="#">
         <img class="img-fluid text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2" height="100" src="../img/icona.jpeg" width="100"></a> 
         <h2 style="font-family: 'Dancing Script', cursive;">MEUCCI BOUTIQUE</h2>
         <button style="background-color: aliceblue !important;" aria-controls="navbarSupportedContent6" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent6" data-bs-toggle="collapse" type="button">
@@ -116,7 +65,7 @@ if(!isset($_SESSION["utente"])){
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="about.html">About</a>
+              <a class="nav-link text-light" href="about.php">About</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="shop.php">Shop</a>
@@ -125,7 +74,7 @@ if(!isset($_SESSION["utente"])){
               <a class="nav-link text-light" href="../funzioni/creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="contact.html">Contact</a>
+              <a class="nav-link text-light" href="contact.php">Contact</a>
             </li>
           </ul>
 
@@ -155,13 +104,8 @@ if(!isset($_SESSION["utente"])){
 </style>
 
 <div class="profilo">
-  <div class="about">
-    <?php
-    echo "<h1>Shop Meucci Boutique</h1>";
-    echo "<br>"; 
-    ?>
+
     <div class="card-body grid-container">
-      <!-- dashboard articoli -->
       <?php
       $ut = $_SESSION["id"];
       $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip, annuncio.descrizione,utente.nome,utente.email,annuncio.ID_utente FROM annuncio
@@ -182,14 +126,14 @@ if(!isset($_SESSION["utente"])){
                   $nom = $row['nome'];
                   $email = $row['email'];
                   $u = $row['ID_utente'];
-                  echo "<div class=\"grid-item\">
-                  <h3>utente : $nom</h3>
-                  <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
-                          <a href=\"../funzioni/VediProfilo.php?AnnuncioID=$ID&u=$u\">email: $email</a><br><br>
-                          <p>tipologia: $tipologia</p>
-                          <p>descrizione: $descrizione</p>
-                          <button><a class=\"text-primary-emphasis\" href=\"../funzioni/aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
-                      </div>";
+                  echo "<div class=\"card-shop grid-item\">
+                  <h3>$nom</h3>
+                  <img src=\"$foto\">
+                  <a href=\"../funzioni/VediProfilo.php?AnnuncioID=$ID&u=$u\">E-MAIL DEL VENDITORE: $email</a><br><br>
+                  <p>TIPOLOGIA: $tipologia</p>
+                  <p>DESCRIZIONE: $descrizione</p>
+                  <button type=\"button\" class=\"btn btn-success\"><a href=\"../funzioni/aggiungiOfferta.php?AnnuncioID=$ID\">Aggiungi Offerta</a></button>
+                  </div>";
               }
           } else {
               echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
@@ -201,7 +145,6 @@ if(!isset($_SESSION["utente"])){
       
       ?>
   </div>
-</div>
   
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     

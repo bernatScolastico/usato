@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Autenticazione</title>
     <link rel="stylesheet" href="s.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -34,7 +34,7 @@ session_start();
                 </div>
                 <?php
                 if(isset($_SESSION["errato"])){
-                    echo "<p>" . $_SESSION["errato"]."</p>";
+                    echo "<script>alert('" . $_SESSION["errato"] . "');</script>";
                 }
                 ?>
                 <button type="submit" class="btn animation" style="--i:3; --j:24;">Login</button>

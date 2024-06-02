@@ -1,10 +1,16 @@
 <?php
 session_start();
-include("../connessione.php");
-
+include ("../connessione.php");
+// Controlla se l'utente è autenticato
 if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
-    exit;
+    
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

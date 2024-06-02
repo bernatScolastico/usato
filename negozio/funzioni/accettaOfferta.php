@@ -1,11 +1,17 @@
 <?php 
 session_start();
-
-include("../connessione.php");
-
-if (!isset($_SESSION["utente"]))
+include ("../connessione.php");
+// Controlla se l'utente è autenticato
+if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
-
+    
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
+}
 $ID_utente = $_SESSION["id"];
 $ID_proposta = $_GET["ID"];
 

@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
         exit;
     } else {
         $_SESSION["utente"] = $email;
-        header("Location: ../pages/home.php");
+        header("Location: ../pages/shop.php");
         exit;
     }
 } else {

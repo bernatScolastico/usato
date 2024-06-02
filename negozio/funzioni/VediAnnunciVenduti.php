@@ -1,10 +1,17 @@
 <?php
 session_start();
 include ("../connessione.php");
-if (!isset($_SESSION["utente"])){
+// Controlla se l'utente è autenticato
+if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
-}
     
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
+}
 if (isset($_GET['AnnuncioID'])) {
       $_SESSION['AnnuncioID'] = $_GET['AnnuncioID'];
 }
@@ -20,94 +27,21 @@ $ut = $_SESSION['ut'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CreaOfferta</title>
+    <title>Vedi Annunci Venduti</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../style.css">
     <style>
-    .centered-content {
-            width: 100%;
-            max-width: 800px;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            margin-top: 20px;
-        }
-
-        .foto_profilo {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 600px;
-            min-width: 450px;
-        }
-
         .card img {
             width: 100%;
             height: auto;
             max-width: 200px;
             max-height: 200px;
         }
-
-        a {
-            color: white;
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .buttons-container {
-            display: none;
-            margin: auto;
-        }
-
-        .buttons-container.show-buttons {
-            display: block;
-        }
-
-        .buttons-container a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .buttons-container a:hover {
-            color: white;
-            text-decoration: none;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-        }
-
         img {
             display: block;
             margin: 20px auto;
             max-width: 200px;
             max-height: 200px;
-        }
-
-        h1,
-        h3,
-        p {
-            text-align: center;
         }
     </style>
     
@@ -127,7 +61,7 @@ $ut = $_SESSION['ut'];
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/about.html">About</a>
+              <a class="nav-link text-light" href="../pages/about.php">About</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
@@ -136,7 +70,7 @@ $ut = $_SESSION['ut'];
               <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
+              <a class="nav-link text-light" href="../pages/contact.php">Contact</a>
             </li>
           </ul>
 
@@ -156,7 +90,7 @@ $ut = $_SESSION['ut'];
 <div class="profilo">
     <div class="about">
         <?php 
-            echo "<h1>Annunci Venduti</h1>";
+            echo "<h1> I Tuoi Annunci Venduti</h1>";
             echo "<br>"; 
         ?>
 
@@ -180,8 +114,10 @@ $ut = $_SESSION['ut'];
                     $ID = $row['ID'];
                     $prezzo = $row['stat'];
 
-                    echo "<div class='col-md-6 mb-4'>
-                            <div class='card'>
+                    echo "
+                    <div class='container'>
+                    <div class='row'>
+                            <div class='card card-annuncio'>
                                 <a href='./articolo.php?idArt=$ID&ut=$ut'>
                                     <img src='$foto' class='card-img-top' alt='$nome'>
                                 </a>
@@ -191,6 +127,7 @@ $ut = $_SESSION['ut'];
                                     <p class='card-text'>Venduto a $prezzo €</p>
                                 </div>
                             </div>
+                          </div>
                           </div>";
                 }
                 echo "</div>";

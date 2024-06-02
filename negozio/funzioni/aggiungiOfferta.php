@@ -1,8 +1,16 @@
 <?php
 session_start();
 include ("../connessione.php");
-if (!isset($_SESSION["utente"])){
+// Controlla se l'utente è autenticato
+if (!isset($_SESSION["utente"])) {
+    // Imposta un messaggio di errore nella sessione
+    $_SESSION["errato"] = "No no devi fare il login furbacchione";
+  
+    // Reindirizza l'utente alla pagina di login
     header("Location: ../index.php");
+    
+    // Assicurati che lo script si fermi dopo il reindirizzamento
+    exit();
 }
     
 if (isset($_GET['AnnuncioID'])) {
@@ -36,7 +44,7 @@ if (isset($_GET['AnnuncioID'])) {
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/about.html">About</a>
+              <a class="nav-link text-light" href="../pages/about.php">About</a>
             </li>
             <li class="nav-item me-4">
               <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
@@ -45,7 +53,7 @@ if (isset($_GET['AnnuncioID'])) {
               <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
+              <a class="nav-link text-light" href="../pages/contact.php">Contact</a>
             </li>
           </ul>
 
@@ -63,18 +71,17 @@ if (isset($_GET['AnnuncioID'])) {
     </nav>
   </section>
 
-    <div class="container" style="text-align:center">
+    <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card schedeEs">
                     <div class="card-header text-center">
                         <h5 class="mb-0">Fai una Proposta</h5>
                     </div>
-                    <div class="card-body">
-                        <form action="scriptOfferta.php" method="post" enctype="multipart/form-data"
-                            class="mt-4">
+                    <div class="card-body text-center">
+                        <form action="scriptOfferta.php" method="post" enctype="multipart/form-data" class="mt-4">
                             <div class="form-group">
-                                <label for="prezzo">Prezzo Proposta</label>
+                                <label for="prezzo">Offerta</label>
                                 <input type="text" name="prezzo" class="form-control" required>
                             </div>
                             <br>

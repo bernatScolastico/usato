@@ -9,3 +9,12 @@ registerLink.onclick = () => {
 loginLink.onclick = () => {
     wrapper.classList.remove('active');
 }
+
+
+// Attendi 5 secondi (5000 millisecondi) e poi rimuovi il div
+setTimeout(function() {
+    var div = document.getElementById('furbacchione');
+    if (div) {
+        div.parentNode.removeChild(div);
+    }
+}, 5000);
