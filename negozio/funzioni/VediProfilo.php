@@ -1,10 +1,21 @@
 <?php
 session_start();
-include("../connessione.php");
-if(!isset($_SESSION["utente"])){
-  $_SESSION["errato"] = "No no devi fare il login furbacchione ";
-  header("Location: ../index.php");
+include ("../connessione.php");
+if (!isset($_SESSION["utente"])){
+    header("Location: ../index.php");
 }
+    
+if (isset($_GET['AnnuncioID'])) {
+      $_SESSION['AnnuncioID'] = $_GET['AnnuncioID'];
+}
+if (isset($_GET["u"])) {
+    $_SESSION["utenteAnnuncio"] = $_GET["u"];
+    
+}
+$idUtenteAnnuncio = $_SESSION["utenteAnnuncio"];
+$AnnuncioID = $_SESSION['AnnuncioID'];
+
+$utenteAttuale = $_SESSION["utente"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -116,21 +127,21 @@ if(!isset($_SESSION["utente"])){
         <div class="collapse navbar-collapse" id="navbarSupportedContent6">
           <ul class="navbar-nav ms-auto my-2 my-lg-0">
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="about.html">About</a>
+              <a class="nav-link text-light" href="../pages/about.html">About</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="shop.php">Shop</a>
+              <a class="nav-link text-light" href="../pages/shop.php">Shop</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="../funzioni/creaAnnuncio.php">Aggiungi</a>
+              <a class="nav-link text-light" href="creaAnnuncio.php">Aggiungi</a>
             </li>
             <li class="nav-item me-4">
-              <a class="nav-link text-light" href="contact.html">Contact</a>
+              <a class="nav-link text-light" href="../pages/contact.html">Contact</a>
             </li>
           </ul>
 
           <div class="d-flex">
-            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="profilo.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+            <a class="text-light border border-2 border-light rounded-circle d-flex align-items-center justify-content-center ms-2"style="height:32px;width:32px;" href="../pages/profilo.php"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
               <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
             </svg></a>
 
@@ -142,68 +153,89 @@ if(!isset($_SESSION["utente"])){
       </div>
     </nav>
   </section>
-  <style>
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-.grid-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-</style>
 
-<div class="profilo">
-  <div class="about">
-    <?php
-    echo "<h1>Shop Meucci Boutique</h1>";
-    echo "<br>"; 
-    ?>
-    <div class="card-body grid-container">
-      <!-- dashboard articoli -->
-      <?php
-      $ut = $_SESSION["id"];
-      $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip, annuncio.descrizione,utente.nome,utente.email,annuncio.ID_utente FROM annuncio
-                  JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
-                  JOIN utente ON utente.ID = annuncio.ID_utente
-                  WHERE utente.ID != $ut and annuncio.stato = 'disponibile'
-                  ";
-      
-      $result = $connessione->query($sql);
-      if ($result) {
-          if ($result->num_rows > 0) {
-              while ($row = $result->fetch_assoc()) {
-                  $nome = $row['nome'];
-                  $foto = $row['foto'];
-                  $tipologia = $row['tip'];
-                  $ID = $row['ID'];
-                  $descrizione = $row['descrizione'];
-                  $nom = $row['nome'];
-                  $email = $row['email'];
-                  $u = $row['ID_utente'];
-                  echo "<div class=\"grid-item\">
-                  <h3>utente : $nom</h3>
-                  <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
-                          <a href=\"../funzioni/VediProfilo.php?AnnuncioID=$ID&u=$u\">email: $email</a><br><br>
-                          <p>tipologia: $tipologia</p>
-                          <p>descrizione: $descrizione</p>
-                          <button><a class=\"text-primary-emphasis\" href=\"../funzioni/aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
-                      </div>";
-              }
-          } else {
-              echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
-          }
-      } else {
-          echo "<h1>Errore nella query</h1>";
-          echo "<p>$sql</p>";
-      }
-      
-      ?>
-  </div>
-</div>
-  
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
-</body>
-</html>
+  <div class="profilo">
+        <div class="about">
+          <?php
+              $sql = "SELECT nome, cognome, classe, eta, email FROM utente WHERE id = '$idUtenteAnnuncio'";
+              $result = $connessione->query($sql);
+              $row = $result->fetch_assoc();
+              echo "<h1>Profilo</h1>";
+              echo "<p>Email:  " . $row["email"] . "</p>";
+              echo "<p>Nome:  " . $row["nome"] . "</p>";
+              echo "<p>Cognome:  " . $row["cognome"] . "</p>";
+              echo "<p>Classe:  " . $row["classe"] . "</p>";
+              echo "<p>Età:  " . $row["eta"] . "</p>";
+              echo "<br>"; 
+            ?>
+
+<div class="card-body">
+            <!-- dashboard articoli -->
+            <?php
+            echo "<h1>Annunci</h1>";
+            $ut = $_SESSION["id"];
+            $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip FROM annuncio
+                        JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
+                        JOIN utente ON utente.ID = annuncio.ID_utente
+                        WHERE utente.ID = '$idUtenteAnnuncio' AND annuncio.stato = 'disponibile'";
+
+            $result = $connessione->query($sql);
+            if ($result) {
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $nome = $row['nome'];
+                        $foto = $row['foto'];
+                        $tipologia = $row['tip'];
+                        $ID = $row['ID'];
+                        echo "<div class=\"card centered-content\">
+                        <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
+                                <h3>$nome</h3>
+                                <p>$tipologia</p>
+                                <button><a class=\"text-primary-emphasis\" href=\"aggiungiOfferta.php?AnnuncioID=$ID\"> Aggiungi Offerta</a></button>
+                            </div>";
+                    }
+                } else {
+                    echo "<p style=\"color:red\">NESSUN ANNUNCIO PRESENTE</p>";
+                }
+            } else {
+                echo "<h1>Errore nella query</h1>";
+                echo "<p>$sql</p>";
+            }
+
+            ?>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

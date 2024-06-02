@@ -147,18 +147,25 @@ if(!isset($_SESSION["utente"])){
   <div class="profilo">
         <div class="about">
           <?php
-              $sql = "SELECT nome, cognome FROM utente WHERE id = " . $_SESSION["id"] . "";
+              $sql = "SELECT nome, cognome, classe, eta, email FROM utente WHERE id = " . $_SESSION["id"] . "";
               $result = $connessione->query($sql);
               $row = $result->fetch_assoc();
-              echo "<h1>Benvenuto/a " . $row["nome"] . " " . $row["cognome"] . "</h1>";
+              echo "<h1>Profilo</h1>";
+              echo "<p>Email:  " . $row["email"] . "</p>";
+              echo "<p>Nome:  " . $row["nome"] . "</p>";
+              echo "<p>Cognome:  " . $row["cognome"] . "</p>";
+              echo "<p>Classe:  " . $row["classe"] . "</p>";
+              echo "<p>Età:  " . $row["eta"] . "</p>";
               echo "<br>"; 
             ?>
 
 <div class="card-body">
             <!-- dashboard articoli -->
             <?php
+
+            echo "<h1>Annunci</h1>";
             $ut = $_SESSION["id"];
-            $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip FROM annuncio
+            $sql = "SELECT annuncio.ID, annuncio.nome, annuncio.foto, tipologia.nome AS tip,annuncio.descrizione FROM annuncio
                         JOIN tipologia ON tipologia.ID = annuncio.ID_tipologia
                         JOIN utente ON utente.ID = annuncio.ID_utente
                         WHERE utente.ID = $ut AND annuncio.stato = 'disponibile'";
@@ -171,10 +178,12 @@ if(!isset($_SESSION["utente"])){
                         $foto = $row['foto'];
                         $tipologia = $row['tip'];
                         $ID = $row['ID'];
+                        $descrizione = $row['descrizione'];
                         echo "<div class=\"card centered-content\">
                         <a href=\"./articolo.php?idArt=$ID&ut=$ut\"><img src=\"$foto\"></a>
                                 <h3>$nome</h3>
                                 <p>$tipologia</p>
+                                <p>descrizione: $descrizione</p>
                                 <button><a class=\"text-danger\" href=\"../funzioni/eliminaAnnuncio.php?AnnuncioID=$ID&ut=$ut\">Elimina Annuncio</a></button><br>
                                 <button><a class=\"text-primary-emphasis\" href=\"../funzioni/Vediofferte.php?AnnuncioID=$ID;&ut=$ut\"> Vedi Offerte</a></button><br>
                             </div>";
@@ -194,9 +203,10 @@ if(!isset($_SESSION["utente"])){
             
         </div>
     </div>
-
       
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
+</body>
+</html>
 </body>
 </html>
